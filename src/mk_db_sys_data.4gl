@@ -3,7 +3,9 @@ IMPORT FGL g2_lib
 IMPORT FGL g2_db
 IMPORT FGL g2_secure
 &include "schema.inc"
-&include "app.inc" -- This sets C_DEF_USER_EMAIL / C_DEF_USER_PASSWD
+
+CONSTANT C_DEF_USER_EMAIL = "test@test.com"
+CONSTANT C_DEF_USER_PASSWD = "T3st.T3st"
 
 DEFINE m_mkey, m_ukey, m_rkey INTEGER
 --------------------------------------------------------------------------------

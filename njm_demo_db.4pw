@@ -67,10 +67,10 @@
   <Group id="75644415" label="njm_demo_db" language="Genero">
     <Library binaryName="Databases" id="1986" label="Databases">
       <File filePath="etc/njm_demo_db.sch"/>
+      <File filePath="src/schema.inc"/>
     </Library>
     <ExtProject filePath="../g2_lib/g2_lib.4pw" id="-936888876"/>
     <Application binaryName="njm_demo_db" dependencies="14000,1986,-936888876_14000" id="18736" label="njm_demo_db">
-      <File filePath="src/app.inc"/>
       <File filePath="src/mk_db.4gl"/>
       <File filePath="src/mk_db.per"/>
       <File filePath="src/mk_db_app_data.4gl"/>
@@ -78,7 +78,6 @@
       <File filePath="src/mk_db_lib.4gl"/>
       <File filePath="src/mk_db_sys_data.4gl"/>
       <File filePath="src/mk_db_sys_ifx.4gl"/>
-      <File filePath="src/schema.inc"/>
     </Application>
   </Group>
 </Project>
