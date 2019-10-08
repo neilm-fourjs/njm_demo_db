@@ -2,12 +2,14 @@ IMPORT util
 IMPORT FGL g2_lib
 IMPORT FGL g2_db
 IMPORT FGL g2_secure
+IMPORT FGL mk_db_lib
 &include "schema.inc"
 
 CONSTANT C_DEF_USER_EMAIL = "test@test.com"
 CONSTANT C_DEF_USER_PASSWD = "T3st.T3st"
 
 DEFINE m_mkey, m_ukey, m_rkey INTEGER
+DEFINE m_file STRING
 --------------------------------------------------------------------------------
 FUNCTION insert_system_data()
   DEFINE l_db STRING
@@ -218,7 +220,8 @@ FUNCTION mk_demo_account()
   END TRY
 
 	LOCATE l_jsonData IN MEMORY
-	CALL l_jsonData.readFile("../etc/sys_users.json")
+	LET m_file = mk_db_lib.mkdb_chkFile("sys_users.json")
+	CALL l_jsonData.readFile(m_file)
   CALL util.JSON.parse( l_jsonData, l_juser )
   CALL mkdb_progress( SFMT("Inserting %1 test users ...",l_juser.getLength()))
 	FOR x = 1 TO l_juser.getLength()

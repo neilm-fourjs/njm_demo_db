@@ -16,7 +16,7 @@ CONSTANT MAX_LINES = 20
 CONSTANT MAX_QTY = 25
 
 DEFINE m_bc_cnt, m_prod_key INTEGER
-
+DEFINE m_file STRING
 ---------------------------------------------------
 FUNCTION insert_app_data()
 	DEFINE l_jcust DYNAMIC ARRAY OF RECORD
@@ -39,7 +39,8 @@ FUNCTION insert_app_data()
 
   CALL mk_db_lib.mkdb_progress("Inserting test customer data...")
 	LOCATE l_jsonData IN MEMORY
-	CALL l_jsonData.readFile("../etc/customers.json")
+	LET m_file = mk_db_lib.mkdb_chkFile("customers.json")
+	CALL l_jsonData.readFile(m_file)
   CALL util.JSON.parse( l_jsonData, l_jcust )
 
 	LET l_add.country_code = "GBR"
@@ -625,7 +626,9 @@ END FUNCTION
 FUNCTION insCountries()
 	DEFINE l_cnt INTEGER
   CALL mk_db_lib.mkdb_progress("Loading Countries ...")
-	LOAD FROM "../etc/countries.unl" INSERT INTO countries
+
+	LET m_file = mk_db_lib.mkdb_chkFile("countries.unl")
+	LOAD FROM m_file INSERT INTO countries
 	SELECT COUNT(*) INTO l_cnt FROM countries
 	CALL mk_db_lib.mkdb_progress(SFMT("Loaded %1 Countries.", l_cnt))
 END FUNCTION
@@ -636,8 +639,9 @@ FUNCTION insColours()
 	DEFINE l_cnt SMALLINT
 	DELETE FROM colours
   CALL mk_db_lib.mkdb_progress("Loading Colours ...")
+	LET m_file = mk_db_lib.mkdb_chkFile("colour_names.txt")
 	LET c = base.Channel.create()
-	CALL c.openFile("../etc/colour_names.txt","r")
+	CALL c.openFile(m_file,"r")
 	WHILE NOT c.isEof()
 		IF c.read( [ l_col.* ] ) THEN
 			INSERT INTO colours VALUES l_col.*
