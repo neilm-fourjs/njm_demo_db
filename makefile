@@ -4,9 +4,11 @@ LIB=../g2_lib
 BASE=$(PWD)
 TRG=../njm_app_bin
 
+export BASE=$(PWD)
 export DBNAME=njm_demo_db
 export FJS_GL_DBGLEV=3
 export CUSTOM_DB=../custom.json
+export FGLIMAGEPATH=../njm_resources/pics:$(FGLDIR)/lib/image2font.txt
 export FGLRESOURCEPATH=$(BASE)/etc
 export FGLLDPATH=$(TRG):$(GREDIR)/lib
 

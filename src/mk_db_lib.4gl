@@ -13,6 +13,7 @@ END FUNCTION
 FUNCTION mkdb_chkFile(l_file STRING) RETURNS STRING
 	IF m_dataPath IS NULL THEN
 		LET m_dataPath = os.path.join( fgl_getEnv("BASE"),"etc")
+		DISPLAY "m_dataPath:",m_dataPath
 		IF NOT os.path.exists( os.path.join(m_dataPath, l_file) ) THEN
 			DISPLAY SFMT("Data file %1 not found!",os.path.join(m_dataPath, l_file))
 			LET m_dataPath = "../etc"

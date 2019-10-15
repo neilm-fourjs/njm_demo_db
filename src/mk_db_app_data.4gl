@@ -2,6 +2,7 @@
 
 IMPORT util
 IMPORT os
+IMPORT FGL g2_lib
 IMPORT FGL g2_db
 IMPORT FGL mk_db_lib
 &include "schema.inc"
@@ -30,6 +31,7 @@ FUNCTION insert_app_data()
 		phone STRING,
 		contact STRING
 	END RECORD
+
 	DEFINE l_cust RECORD LIKE customer.*
 	DEFINE l_add RECORD LIKE addresses.*
 	DEFINE l_jsonData TEXT
@@ -65,6 +67,8 @@ FUNCTION insert_app_data()
 		LET l_cust.total_invoices = util.Math.rand(10000)
 		INSERT INTO customer VALUES l_cust.*
 	END FOR
+	SELECT COUNT(*) INTO x FROM customer
+	CALL mk_db_lib.mkdb_progress(SFMT("Inserted %1 Customers.", x))
 
 	CALL mk_db_lib.mkdb_progress("Inserting test stock data...")
 
@@ -115,7 +119,9 @@ FUNCTION insert_app_data()
 	CALL insStock("WW01-DES", NULL, "Combat Jacket - Desert", NULL, 59.99, "DD", NULL)
 	CALL insStock("WW01-JUN", NULL, "Combat Jacket - Jungle", NULL, 59.99, "DD", NULL)
 
-	CALL genStock("../pics/products", "??", FALSE)
+	CALL genStock(os.path.join(g2_lib.g2_getImagePath(),"products"), "??", FALSE)
+	SELECT COUNT(*) INTO x FROM stock
+	CALL mk_db_lib.mkdb_progress(SFMT("Inserted %1 Stock Items.", x))
 
 	INSERT INTO stock_cat VALUES('ART', 'Office Decor')
 	INSERT INTO stock_cat VALUES('ENTERTAIN', 'Entertainment')
@@ -550,7 +556,7 @@ FUNCTION genStock(l_base STRING, l_cat STRING, l_process BOOLEAN)
 	DEFINE l_d INT
 	DEFINE l_nam STRING
 
-	DISPLAY "---------------Generating Stock from ", l_base, " Cat:", l_cat
+	DISPLAY "---------------Generating Stock from: ", l_base, " Cat:", l_cat
 
 	CALL os.Path.dirSort("name", 1)
 	LET l_d = os.Path.dirOpen(l_base)
